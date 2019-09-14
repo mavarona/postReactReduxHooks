@@ -62,7 +62,7 @@ const NavBar = props => {
       </ul>
       <ul>
         <li>
-          <Link to="/createPost">New Post</Link>
+          <Link to="/createpost">New Post</Link>
         </li>
         {buttons}
       </ul>
