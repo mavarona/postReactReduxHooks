@@ -1,6 +1,6 @@
 const getPost = (
     state = {
-        post: []
+        post: {}
     },
     action
 ) => {
