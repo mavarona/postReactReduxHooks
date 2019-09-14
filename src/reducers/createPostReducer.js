@@ -1,6 +1,6 @@
 const createPost = (
     state = {
-        user: {}
+        post: {}
     },
     action
 ) => {
