@@ -88,6 +88,44 @@ class Firebase {
 
     }
 
+    async updatePost(postid, postData) {
+        if (postData['cover']) {
+            const storageRef = firebase.storage().ref();
+            const storageChild = storageRef.child(postData.cover.name);
+            const postCover = await storageChild.put(postData.cover);
+            const downloadUrl = await storageChild.getDownloadURL();
+            const fileRef = postCover.ref.location.path;
+
+            await storageRef.child(postData['cover']).delete().catch(err => console.log(err));
+
+            let updatePost = {
+                title: postData.title,
+                content: postData.content,
+                cover: downloadUrl,
+                fileref: fileRef
+            };
+
+            const post = await firebase.firestore().collection('posts').doc(postid).set(updatePost, {
+                merge: true
+            }).catch(err => console.log(err));
+
+            return post;
+
+        } else {
+            const post = await firebase.firestore().collection('posts').doc(postid).set(postData, {
+                merge: true
+            }).catch(err => console.log(err));
+
+            return post;
+        }
+    }
+
+    async deletePost(postID, fileRef) {
+        const storageRef = firebase.storage().ref();
+        await storageRef.child(fileRef).delete().catch(err => console.log(err));
+        const post = await firebase.firestore().collection('posts').doc(postID).delete().catch(err => console.log(err));
+        return post;
+    }
 
 
 }
